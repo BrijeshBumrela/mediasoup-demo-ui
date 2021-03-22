@@ -127,19 +127,44 @@ export default class WebRTC {
         return transport;
     }
 
-    async createConsumer(userId, kind) {
+    async createConsumer(producerId, kind) {
         // transport, producerId, kind
         const transport = this.selfUser.consumeTransport;
         const { rtpCapabilities } = this.device;
 
         const data = await this.socket.request("consume", {
             rtpCapabilities,
-            userId,
-            transportId: transport.id,
+            userId: producerId,
             kind,
         });
 
-        return await transport.consume({ ...data });
+        const consumer = await transport.consume({ ...data });
+
+        await this.socket.request("resume", {
+            consumerId: consumer.id,
+            socketId: producerId,
+            type: kind,
+        });
+
+        return consumer
+    }
+
+    async getUserMedia(kind) {
+        return navigator.mediaDevices.getUserMedia({
+            [kind]: true
+        })
+    }
+
+    async produce(kind, transport) {
+        const stream = await this.getUserMedia(kind);
+        const track = await this.getTrack(stream, kind);
+        const producer = await this.createProducer(track, transport)
+        return { producer, stream };
+    }
+
+    async getTrack(stream, kind) {
+        if (kind === 'audio') return stream.getAudioTracks()[0];
+        else if (kind === 'video') return stream.getVideoTracks()[0];
     }
 
     async createProducer(track, transport) {
@@ -155,15 +180,10 @@ export default class WebRTC {
     }
 
     async consumeAll(producers, type) {
-        Promise.all(
+        return Promise.all(
             producers.map(async (producer) => {
                 const { producerId } = producer;
                 const consumer = await this.createConsumer(producerId, type);
-                await this.socket.request("resume", {
-                    consumerId: consumer.id,
-                    socketId: producerId,
-                    type,
-                });
                 return { producerId, consumer };
             })
         );

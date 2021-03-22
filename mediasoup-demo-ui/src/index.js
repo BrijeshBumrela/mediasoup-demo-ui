@@ -6,20 +6,20 @@ import Meeting from './pages/Meeting/Meeting';
 
 const App = () => {
     return (
-        <>
+        <div style={{ width: '80%', margin: 'auto' }}>
             {" "}
-            <h1>Mediasoup demo</h1>
+            <h3>Mediasoup demo</h3>
             <Router>
                 <Switch>
                     <Route path="/" exact>
-                        <Redirect to={`/${uuid4()}`} />
+                        <Redirect to={`/${uuid4()}}`} />
                     </Route>
                     <Route path="/:meetingId">
                         <Meeting />
                     </Route>
                 </Switch>
             </Router>
-        </>
+        </div>
     );
 };
 
