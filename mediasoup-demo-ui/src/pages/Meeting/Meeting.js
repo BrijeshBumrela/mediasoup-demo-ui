@@ -47,8 +47,6 @@ const Meeting = (props) => {
                     (each) => new User(each.name, each.id)
                 );
 
-                console.log("YAHAHA");
-
                 setUsers(prevUsers);
                 setSelfUser(user);
 
@@ -69,12 +67,6 @@ const Meeting = (props) => {
                 const videoConsumers = await webrtc.consumeAll(
                     existingVideoProducers,
                     "video"
-                );
-
-                console.log(
-                    "VIDEO CONSUMERS",
-                    videoConsumers,
-                    existingVideoProducers
                 );
 
                 setUsers((users) => {
