@@ -217,7 +217,7 @@ const Meeting = (props) => {
                 }}
             >
                 <button
-                    class="waves-effect waves-light btn"
+                    className="waves-effect waves-light btn"
                     onClick={() => setPreview(false)}
                 >
                     JOIN

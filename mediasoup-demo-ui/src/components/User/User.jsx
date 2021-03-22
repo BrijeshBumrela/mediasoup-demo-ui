@@ -49,7 +49,7 @@ const UserComponent = ({ user, toggleVideo, selfUser, toggleAudio }) => {
             {id === selfUser.id && (
                 <div>
                     <button
-                        class="waves-effect waves-light btn"
+                        className="waves-effect waves-light btn"
                         style={{ marginRight: "10px" }}
                         onClick={toggleVideo}
                     >
@@ -60,7 +60,7 @@ const UserComponent = ({ user, toggleVideo, selfUser, toggleAudio }) => {
                             : "pause video"}
                     </button>
                     <button
-                        class="waves-effect waves-light btn"
+                        className="waves-effect waves-light btn"
                         onClick={toggleAudio}
                     >
                         {!audioProducer
