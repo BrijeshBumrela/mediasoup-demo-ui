@@ -1,5 +1,5 @@
 const config = {
-    host: "http://13.233.100.69:8000",
+    host: "https://www.bumrela.com/",
 };
 
 export default config;
