@@ -1,12 +1,14 @@
 import React from "react";
 
-const UserComponent = ({ user, toggleVideo, selfUser, toggleAudio }) => {
+const UserComponent = ({ user, toggleVideo, selfUser, toggleAudio, toggleScreenShare }) => {
     const {
         name,
         audioStream,
         videoStream,
+        screenShareStream,
         audioProducer,
         videoProducer,
+        screenShareProducer,
         id,
     } = user;
 
@@ -44,7 +46,16 @@ const UserComponent = ({ user, toggleVideo, selfUser, toggleAudio }) => {
                         autoPlay
                     ></video>
                 )}
+
+                {screenShareProducer && !screenShareProducer.paused && (
+                    <video
+                        style={{ width: "100%", height: "100%" }}
+                        ref={(ref) => setSrcObject(ref, screenShareStream)}
+                        autoPlay
+                    ></video>
+                )}
             </div>
+                
 
             {id === selfUser.id && (
                 <div>
@@ -56,18 +67,29 @@ const UserComponent = ({ user, toggleVideo, selfUser, toggleAudio }) => {
                         {!videoProducer
                             ? "Start video"
                             : videoProducer.paused
-                            ? "resume video"
-                            : "pause video"}
+                                ? "resume video"
+                                : "pause video"}
                     </button>
                     <button
                         className="waves-effect waves-light btn"
+                        style={{ marginRight: "10px" }}
                         onClick={toggleAudio}
                     >
                         {!audioProducer
                             ? "Start audio"
                             : audioProducer.paused
-                            ? "resume audio"
-                            : "pause audio"}
+                                ? "resume audio"
+                                : "pause audio"}
+                    </button>
+                    <button
+                        className="waves-effect waves-light btn"
+                        onClick={toggleScreenShare}
+                    >
+                        {!screenShareProducer
+                            ? "Start Screen Share"
+                            : screenShareProducer.paused
+                                ? "Start screen share"
+                                : "Stop screen share"}
                     </button>
                 </div>
             )}

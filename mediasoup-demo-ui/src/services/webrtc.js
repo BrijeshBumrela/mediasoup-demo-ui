@@ -150,6 +150,9 @@ export default class WebRTC {
     }
 
     async getUserMedia(kind) {
+        if (kind === 'screen') {
+            return navigator.mediaDevices.getDisplayMedia();
+        }
         return navigator.mediaDevices.getUserMedia({
             [kind]: true
         })
@@ -164,7 +167,7 @@ export default class WebRTC {
 
     async getTrack(stream, kind) {
         if (kind === 'audio') return stream.getAudioTracks()[0];
-        else if (kind === 'video') return stream.getVideoTracks()[0];
+        else if (kind === 'video' | kind === 'screen') return stream.getVideoTracks()[0];
     }
 
     async createProducer(track, transport) {

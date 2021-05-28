@@ -174,8 +174,12 @@ const Meeting = (props) => {
         } else {
             if (updatedSelfUser.videoProducer.paused) {
                 updatedSelfUser.videoProducer.resume();
+                const stream = await webrtc.getUserMedia('video');
+                updatedSelfUser.videoProducer.replaceTrack({ track: stream.getVideoTracks()[0] })
+                updatedSelfUser.videoStream = stream;
             } else {
                 updatedSelfUser.videoProducer.pause();
+                updatedSelfUser.videoStream.getTracks().forEach(track => track.stop());
             }
         }
 
@@ -199,6 +203,36 @@ const Meeting = (props) => {
                 updatedSelfUser.audioProducer.resume();
             } else {
                 updatedSelfUser.audioProducer.pause();
+            }
+        }
+
+        setSelfUser(updatedSelfUser);
+    };
+
+    const toggleScreenShare = async () => {
+        if (!selfUser) throw new Error("Self user is not created");
+
+        const updatedSelfUser = { ...selfUser };
+
+        if (!updatedSelfUser.screenShareProducer) {
+            const { producer, stream } = await webrtc.produce(
+                "screen",
+                selfUser.produceTransport
+            );
+            updatedSelfUser.screenShareProducer = producer;
+            updatedSelfUser.screenShareStream = stream;
+        } else {
+            if (updatedSelfUser.screenShareProducer.paused) {
+                updatedSelfUser.screenShareProducer.resume();
+                const stream = await webrtc.getUserMedia('screen');
+                updatedSelfUser.screenShareProducer.replaceTrack({ track: stream.getVideoTracks()[0] })
+                updatedSelfUser.setStream('screen', stream);
+            } else {
+                updatedSelfUser.screenShareProducer.pause();
+                updatedSelfUser.screenShareStream.getTracks().forEach(track => track.stop());
+                updatedSelfUser.screenShareStream.getVideoTracks()[0].onended = function () {
+                    console.log('hahah');
+                };
             }
         }
 
@@ -232,6 +266,7 @@ const Meeting = (props) => {
             <UserComponent
                 toggleVideo={toggleVideo}
                 toggleAudio={toggleAudio}
+                toggleScreenShare={toggleScreenShare}
                 user={selfUser}
                 selfUser={selfUser}
             />
@@ -240,6 +275,7 @@ const Meeting = (props) => {
                     <UserComponent
                         toggleVideo={toggleVideo}
                         toggleAudio={toggleAudio}
+                        toggleScreenShare={toggleScreenShare}
                         key={user.id}
                         user={user}
                         selfUser={selfUser}
