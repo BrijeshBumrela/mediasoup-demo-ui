@@ -231,8 +231,11 @@ const Meeting = (props) => {
                 updatedSelfUser.screenShareProducer.pause();
                 updatedSelfUser.screenShareStream.getTracks().forEach(track => track.stop());
                 updatedSelfUser.screenShareStream.getVideoTracks()[0].onended = function () {
-                    console.log('hahah');
+                    updatedSelfUser.screenShareStream.getTracks().forEach(track => track.stop());
+                    updatedSelfUser.screenShareStream = null;
                 };
+                updatedSelfUser.screenShareStream.getTracks().forEach(track => track.stop());
+                updatedSelfUser.screenShareStream = null;
             }
         }
 
@@ -263,13 +266,15 @@ const Meeting = (props) => {
     return (
         <div>
             <h5>MEETING JOINED with id {meetingId}. Bring your friends by sharing the url link</h5>
-            <UserComponent
-                toggleVideo={toggleVideo}
-                toggleAudio={toggleAudio}
-                toggleScreenShare={toggleScreenShare}
-                user={selfUser}
-                selfUser={selfUser}
-            />
+            {selfUser && (
+                <UserComponent
+                    toggleVideo={toggleVideo}
+                    toggleAudio={toggleAudio}
+                    toggleScreenShare={toggleScreenShare}
+                    user={selfUser}
+                    selfUser={selfUser}
+                />
+            )}
             <div style={{ display: 'flex', margin: '10px', flexWrap: 'wrap' }}>
                 {users.map((user) => (
                     <UserComponent

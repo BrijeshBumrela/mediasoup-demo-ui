@@ -13,7 +13,7 @@ const UserComponent = ({ user, toggleVideo, selfUser, toggleAudio, toggleScreenS
     } = user;
 
     const setSrcObject = (ref, stream) => {
-        if (ref && stream) ref.srcObject = stream;
+        if (ref) ref.srcObject = stream;
     };
 
     return (
@@ -29,33 +29,49 @@ const UserComponent = ({ user, toggleVideo, selfUser, toggleAudio, toggleScreenS
                         ref={(ref) => setSrcObject(ref, audioStream)}
                     ></audio>
                 )}
-            <div
-                style={{
-                    marginBottom: "10px",
-                    maxWidth: "320px",
-                    width: "320px",
-                    height: "320px",
-                    objectFit: "cover",
-                    border: "1px solid gray",
-                }}
-            >
-                {videoProducer && !videoProducer.paused && (
-                    <video
-                        style={{ width: "100%", height: "100%" }}
-                        ref={(ref) => setSrcObject(ref, videoStream)}
-                        autoPlay
-                    ></video>
-                )}
 
-                {screenShareProducer && !screenShareProducer.paused && (
-                    <video
-                        style={{ width: "100%", height: "100%" }}
-                        ref={(ref) => setSrcObject(ref, screenShareStream)}
-                        autoPlay
-                    ></video>
-                )}
+
+            <div style={{ display: 'flex' }}>
+                <div
+                    style={{
+                        marginBottom: "10px",
+                        maxWidth: "320px",
+                        width: "320px",
+                        height: "320px",
+                        objectFit: "cover",
+                        border: "1px solid gray",
+                        marginRight: 20
+                    }}
+                >
+                    {videoProducer && !videoProducer.paused && (
+                        <video
+                            style={{ width: "100%", height: "100%" }}
+                            ref={(ref) => setSrcObject(ref, videoStream)}
+                            autoPlay
+                        ></video>
+                    )}
+
+                </div>
+
+                <div
+                    style={{
+                        marginBottom: "10px",
+                        maxWidth: "320px",
+                        width: "320px",
+                        height: "320px",
+                        objectFit: "cover",
+                        border: "1px solid gray",
+                    }}
+                >
+                    {screenShareProducer && !screenShareProducer.paused && (
+                        <video
+                            style={{ width: "100%", height: "100%" }}
+                            ref={(ref) => setSrcObject(ref, screenShareStream)}
+                            autoPlay
+                        ></video>
+                    )}
+                </div>
             </div>
-                
 
             {id === selfUser.id && (
                 <div>

@@ -8,6 +8,7 @@ export default class User {
     screenShareProducer;
     audioStream;
     videoStream;
+    screenShareStream;
 
     constructor(name, id) {
         this.name = name;
